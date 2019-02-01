@@ -7,7 +7,7 @@ arg_folder = join(dirname(__file__), "i_think_therefore_i_am")
 arg = Argument(path=arg_folder)
 
 # ignore user input, just go trough all premises
-# dialog = BasePolicy(arg)
+# dialog = BasePolicy(argument=arg)
 
 # defend when user disagrees
 dialog = KnowItAllPolicy(arg)

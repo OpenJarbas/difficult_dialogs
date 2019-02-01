@@ -152,6 +152,34 @@ pprint(arg.as_json)
 
 A policy is a way to run an argument, it decides how the conversation will go
 
+```python
+from os.path import join, dirname
+
+from difficult_dialogs.arguments import Argument
+from difficult_dialogs.policy import BasePolicy
+
+arg_folder = join(dirname(__file__), "argument_template")
+arg = Argument(path=arg_folder)
+dialog = BasePolicy(argument=arg)
+
+
+# argument / user feedback loop
+# dialog.run()
+
+# argument manual control
+print(dialog.start())
+while not dialog.finished:
+    assertion = dialog.pick_assertion()
+    if assertion:
+        print(assertion)
+        for s in assertion.statements:
+            print(s)
+        print(assertion.sources)
+    else:
+        print(dialog.end())
+```
+
+You can make your own policies by overriding key methods, or you can use the default policies 
 
 - argument.intro is printed fully on start, it is meant to introduce the argument
 
@@ -175,7 +203,7 @@ arg_folder = join(dirname(__file__), "i_think_therefore_i_am")
 arg = Argument(path=arg_folder)
 
 # ignore user input, just go trough all premises
-# dialog = BasePolicy(arg)
+# dialog = BasePolicy(argument=arg)
 
 # defend when user disagrees
 dialog = KnowItAllPolicy(arg)
