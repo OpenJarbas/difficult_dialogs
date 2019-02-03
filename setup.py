@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='difficult_dialogs',
-    version='0.2',
+    version='0.2.1',
     packages=['difficult_dialogs'],
     url='https://github.com/JarbasAl/difficult_dialogs',
     license='MIT',

@@ -15,7 +15,7 @@ class DebugPolicy(KnowItAllPolicy):
         print("## ARGUMENT START: " + str(self.argument))
         print(self.start())
         while not self.finished:
-            topic = str(self.current_assertion)
+            topic = str(self.current_premise)
             print("## Currently discussing: " + topic)
             # choose output
             output = self._run_once()

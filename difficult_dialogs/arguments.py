@@ -210,7 +210,7 @@ class Argument(object):
     @property
     def is_true(self):
         """ Arguments are true if all their premises are true """
-        for s in self.assertions:
+        for s in self.premises:
             if not s.is_true:
                 return False
         return True
@@ -219,7 +219,7 @@ class Argument(object):
     def as_json(self):
         return {"intro": self.intro_statement.text,
                 "conclusion": self.conclusion_statement.text,
-                "premises": [s.as_json for s in self.assertions],
+                "premises": [s.as_json for s in self.premises],
                 "is_true": self.is_true}
 
     def update(self, argument):
@@ -232,7 +232,7 @@ class Argument(object):
 
         """
         if isinstance(argument, Argument):
-            for a in argument.assertions:
+            for a in argument.premises:
                 self.add_premise(a)
         elif isinstance(argument, dict):
             assertions = argument.get("premises", [])
@@ -252,7 +252,7 @@ class Argument(object):
                 str(type(argument)))
 
     @property
-    def assertions(self):
+    def premises(self):
         """ list of Premise objects in this Argument """
         bucket = []
         for a in self._premises:
@@ -289,7 +289,7 @@ class Argument(object):
         return {"num_statements": len(self.statements),
                 "num_support": len(self.support_statements),
                 "num_sources": len(self.sources),
-                "num_premises": len(self.assertions),
+                "num_premises": len(self.premises),
                 "is_true": self.is_true}
 
     def __str__(self):

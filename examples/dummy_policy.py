@@ -9,14 +9,42 @@ class DummyPolicy(KnowItAllPolicy):
         KnowItAllPolicy.__init__(self, argument)
         self.name = "dummy_policy"
 
-    def get_feedback(self, prompt=None):
+    def on_user_input(self, text):
+        """ handle user input
+
+        intent parsing should be done here
+
+        if not using the run loop tipical actions are call self.agree() or
+        self.disagree()
+
         """
+        print("user says: " + text)
+
+    def wait_for_feedback(self, prompt=None):
+        """
+        used in run_async(), if not running async get_feedback is used instead
+
         ask user if he agrees with current statement or not
 
         prompt is a string or list of strings, if it's a list a random entry will be picked
 
         return True or False """
-        if int(time.time() % 2)== 0:
+        if int(time.time() % 2) == 0:
+            self.submit_input("I agree")
+            return True
+        self.submit_input("I disagree")
+        return False
+
+    def get_feedback(self, prompt=None):
+        """
+        used in run(), if running async wait_for_feedback is used instead
+
+        ask user if he agrees with current statement or not
+
+        prompt is a string or list of strings, if it's a list a random entry will be picked
+
+        return True or False """
+        if int(time.time() % 2) == 0:
             print(self.speak("user agrees"))
             return True
         print(self.speak("user disagrees"))
@@ -29,7 +57,7 @@ class DummyPolicy(KnowItAllPolicy):
 
         """
         self.agree()
-        statement = self.pick_next_statement()
+        statement = self.choose_next_statement()
         if not statement:
             return None
         return self.speak(statement)
@@ -82,7 +110,6 @@ arg = Argument(path=arg_folder)
 
 # defend when user disagrees
 dialog = DummyPolicy(arg)
-
 
 # argument / user loop
 dialog.run()

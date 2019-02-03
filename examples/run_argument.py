@@ -9,14 +9,14 @@ dialog = BasePolicy(argument=arg)
 
 
 # load a random premise
-assertion = dialog.pick_assertion()
-dialog.current_assertion = assertion
+assertion = dialog.choose_premise()
+dialog.current_premise = assertion
 
 print(assertion)
 print(assertion.sources)
 
 # select a statement from premise
-statement = dialog.pick_next_statement()
+statement = dialog.choose_next_statement()
 print(statement)
 
 
@@ -29,7 +29,7 @@ print(dialog.start())
 
 while not dialog.finished:
     # get a new premise
-    assertion = dialog.pick_assertion()
+    assertion = dialog.choose_premise()
     if assertion:
         for s in assertion.statements:
             print(s)
