@@ -53,6 +53,21 @@
     <a class="" href="..">Home</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.arguments/">arguments</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.policy/">policy</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">premises</a>
@@ -73,21 +88,6 @@
             <li class="toctree-l1">
 		
     <a class="" href="../difficult_dialogs.statements/">statements</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.policy/">policy</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.arguments/">arguments</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
 	    </li>
           
         </ul>
@@ -123,16 +123,18 @@
             <div class="section">
               
                 <h2 id="module-difficult_dialogspremises">Module difficult_dialogs.premises</h2>
-<h3 id="premise">Premise</h3>
-<p>A premise is a set of Statements, a premise is True if all it's statements are True</p>
-<p>A premise also has sources to back it up, and support dialog that can be interjected at will</p>
-<pre><code class="python">from difficult_dialogs.premises import Premise
+<pre><code>A premise is a set of Statements, a premise is True if all it's statements are True
 
-p = Premise(&quot;pizza tastes good&quot;)
-p.add_statement(&quot;pizza is food&quot;)
-p.add_statement(&quot;the taste of pizza is pleasant&quot;)
-p.add_support_statement(&quot;i like pizza&quot;)
-p.add_source(&quot;http://pizza_reviews.com&quot;)
+A premise also has sources to back it up, and support dialog that can be interjected at will
+
+```python
+from difficult_dialogs.premises import Premise
+
+p = Premise("pizza tastes good")
+p.add_statement("pizza is food")
+p.add_statement("the taste of pizza is pleasant")
+p.add_support_statement("i like pizza")
+p.add_source("http://pizza_reviews.com")
 
 for s in p.statements:
     assert s.is_true
@@ -148,80 +150,74 @@ assert p.as_json == {'is_true': False,
                                     'the taste of pizza is pleasant'],
                      'support': ['i like pizza'],
                      'description': 'pizza tastes good'}
+```
 </code></pre>
-
+<h3 id="premise">Premise</h3>
+<p>None</p>
 <h4 id="add95how95statement">add_how_statement</h4>
 <pre><code>
 def add_how_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95source">add_source</h4>
 <pre><code>
 def add_source(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95statement">add_statement</h4>
 <pre><code>
 def add_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95support95statement">add_support_statement</h4>
 <pre><code>
 def add_support_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95what95statement">add_what_statement</h4>
 <pre><code>
 def add_what_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95when95statement">add_when_statement</h4>
 <pre><code>
 def add_when_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95where95statement">add_where_statement</h4>
 <pre><code>
 def add_where_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="add95why95statement">add_why_statement</h4>
 <pre><code>
 def add_why_statement(self, text)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>text:
-</code></pre>
+<p>Args:
+    text:</p>
 <h4 id="agree">agree</h4>
 <pre><code>
 def agree(self)
@@ -235,9 +231,8 @@ def from_json(self, json_dict)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>json_dict:
-</code></pre>
+<p>Args:
+    json_dict:</p>
 <h4 id="set95description">set_description</h4>
 <pre><code>
 def set_description(self, text)
@@ -251,8 +246,8 @@ def update(self, premise)
 
 </code></pre>
 
-<p>if premise is an Premise object or dictionary, statements,</p>
-<p>support and sources will be merged</p>
+<p>if premise is an Premise object or dictionary, statements,
+support and sources will be merged</p>
 <p>if premise is a string, a support statement will be merged</p>
 <p>if premise is a list, each item will be added recursively</p>
 <h4 id="validate95statement">validate_statement</h4>
@@ -261,9 +256,8 @@ def validate_statement(statement)
 
 </code></pre>
 
-<p>Args:</p>
-<pre><code>statement:
-</code></pre>
+<p>Args:
+    statement:</p>
 <p>Returns:</p>
               
             </div>
@@ -275,7 +269,7 @@ def validate_statement(statement)
         <a href="../difficult_dialogs.statements/" class="btn btn-neutral float-right" title="statements">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../difficult_dialogs.policy/" class="btn btn-neutral" title="policy"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -301,7 +295,7 @@ def validate_statement(statement)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../difficult_dialogs.policy/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../difficult_dialogs.statements/" style="color: #fcfcfc">Next &raquo;</a></span>
