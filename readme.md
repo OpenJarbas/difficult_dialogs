@@ -200,25 +200,10 @@ for s in p.statements:
 
 print(p.as_json)
 """
-{'is_true': False,
- 'sources': ['http://pizza_reviews.com'],
- 'statements': ['pizza is food',
-                'the taste of pizza is pleasant'  * [Install](#install)
-10
-  * [Usage](#usage)
-11
-    + [Sample output](#sample-output)
-12
-    + [Documentation](#documentation)
-13
-      - [Statements](#statements)
-14
-      - [Premises](#premises)
-15
-      - [Arguments](#arguments)
-16
-      - [Policies](#policies)],
- 'support': ['i like pizza'],
+{'is_true': True,
+ 'sources': [],
+ 'statements': ['the taste of pizza is pleasant'],
+ 'support': [],
  'description': 'pizza tastes good'}
  """
 ```
