@@ -5,7 +5,14 @@ from difficult_dialogs.policy import KnowItAllPolicy
 
 
 class DebugPolicy(KnowItAllPolicy):
+    """
+    """
     def __init__(self, argument):
+        """
+
+        Args:
+            argument:
+        """
         KnowItAllPolicy.__init__(self, argument)
         self.name = "debug_policy"
 
