@@ -6,15 +6,24 @@
 
 Tools to easily guide conversations towards a certain objective
 
-
+- [Install](#install)
+- [Usage](#usage)
+  * [Sample output](#sample-output)
+- [Documentation](#documentation)
+  * [Statements](#statements)
+  * [Premises](#premises)
+  * [Arguments](#arguments)
+  * [Policies](#policies)
+- [Credits](#credits)
 
 ## Install
 
     pip install difficult_dialogs
     
+
 ## Usage
 
-[Read the docs](https://jarbasal.github.io/difficult_dialogs/), examples [here](https://github.com/JarbasAl/difficult_dialogs/tree/master/examples)
+examples [here](https://github.com/JarbasAl/difficult_dialogs/tree/master/examples)
 
 there are many ways one could create a conversation loop
 
@@ -48,8 +57,7 @@ dialog.stop()
 
 ```
 
-
-#### Sample output
+### Sample output
 
 Here is an output where i always agree
 
@@ -156,3 +164,100 @@ Here is the same argument, but this time i always disagree
      there needs to be something doing the processing
      i process information, therefore i am
 
+### Documentation
+
+[Read the docs](https://jarbasal.github.io/difficult_dialogs/)
+
+#### Statements
+
+A statement is the lowest level of a dialog, it is a text sentence that may be True or False
+
+```python
+from difficult_dialogs.statements import Statement
+
+s = Statement("i like pizza")
+
+if s.is_true:
+    print(s)
+
+```
+
+[Full docs](https://jarbasal.github.io/difficult_dialogs/difficult_dialogs.statements/)
+
+#### Premises
+
+A premise is a set of Statements, a premise is True if all it's statements are True
+
+A premise also has sources to back it up, and support dialog that can be interjected at will
+
+```python
+from difficult_dialogs.premises import Premise
+
+p = Premise("pizza tastes good", ["the taste of pizza is pleasant"])
+
+for s in p.statements:
+    print(s)
+
+print(p.as_json)
+"""
+{'is_true': False,
+ 'sources': ['http://pizza_reviews.com'],
+ 'statements': ['pizza is food',
+                'the taste of pizza is pleasant'  * [Install](#install)
+10
+  * [Usage](#usage)
+11
+    + [Sample output](#sample-output)
+12
+    + [Documentation](#documentation)
+13
+      - [Statements](#statements)
+14
+      - [Premises](#premises)
+15
+      - [Arguments](#arguments)
+16
+      - [Policies](#policies)],
+ 'support': ['i like pizza'],
+ 'description': 'pizza tastes good'}
+ """
+```
+
+[Full docs](https://jarbasal.github.io/difficult_dialogs/difficult_dialogs.premises/)
+
+#### Arguments
+
+An Argument is a set of premises, a argument is True if all it's premises are True
+
+Arguments can be loaded from a folder structured like this
+
+```bash
+$ tree argument_template/
+argument_template/
+├── argument.conclusion
+├── argument.intro
+├── X.premise
+├── X.source
+├── X.support
+└── Y.premise
+
+```
+
+[Full docs](https://jarbasal.github.io/difficult_dialogs/difficult_dialogs.arguments/)
+
+#### Policies
+
+The actual dialog interaction between user/bot is created by a policy
+
+Policies load an Argument and decide how the conversation will go
+
+[Full docs](https://jarbasal.github.io/difficult_dialogs/difficult_dialogs.policy/)
+
+You can make your own policies by overriding key methods, or you can
+use the default policies
+
+see [example of DummyPolicy](https://github.com/JarbasAl/difficult_dialogs/blob/master/examples/dummy_policy.py)
+
+## Credits
+
+[JarbasAl](https://jarbasal.github.io)
