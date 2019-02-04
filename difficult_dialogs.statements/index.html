@@ -53,11 +53,6 @@
     <a class="" href="..">Home</a>
 	    </li>
           
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.policy/">policy</a>
-	    </li>
-          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">statements</a>
@@ -83,6 +78,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../difficult_dialogs.arguments/">arguments</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.policy/">policy</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -124,7 +124,20 @@
               
                 <h2 id="module-difficult_dialogsstatements">Module difficult_dialogs.statements</h2>
 <h3 id="statement">Statement</h3>
-<p>A text sentence that may be True or False</p>
+<p>A statement is the lowest level of a dialog, it is a text sentence that may be True or False</p>
+<pre><code class="python">from difficult_dialogs.statements import Statement
+
+s = Statement(&quot;i like pizza&quot;)
+assert str(s) == &quot;i like pizza&quot;
+assert s.text == &quot;i like pizza&quot;
+
+assert bool(s) == True
+s.disagree()
+assert bool(s) == False
+s.agree()
+assert bool(s) == True
+</code></pre>
+
 <h4 id="agree">agree</h4>
 <pre><code>
 def agree(self)
@@ -160,7 +173,7 @@ def from_json(self, json_dict)
         <a href="../difficult_dialogs.exceptions/" class="btn btn-neutral float-right" title="exceptions">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../difficult_dialogs.policy/" class="btn btn-neutral" title="policy"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -186,7 +199,7 @@ def from_json(self, json_dict)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../difficult_dialogs.policy/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../difficult_dialogs.exceptions/" style="color: #fcfcfc">Next &raquo;</a></span>

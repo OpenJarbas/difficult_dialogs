@@ -55,11 +55,6 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../difficult_dialogs.policy/">policy</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
     <a class="" href="../difficult_dialogs.statements/">statements</a>
 	    </li>
           
@@ -71,6 +66,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../difficult_dialogs.arguments/">arguments</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.policy/">policy</a>
 	    </li>
           
             <li class="toctree-l1 current">
@@ -124,6 +124,32 @@
               
                 <h2 id="module-difficult_dialogspremises">Module difficult_dialogs.premises</h2>
 <h3 id="premise">Premise</h3>
+<p>A premise is a set of Statements, a premise is True if all it's statements are True</p>
+<p>A premise also has sources to back it up, and support dialog that can be interjected at will</p>
+<pre><code class="python">from difficult_dialogs.premises import Premise
+
+p = Premise(&quot;pizza tastes good&quot;)
+p.add_statement(&quot;pizza is food&quot;)
+p.add_statement(&quot;the taste of pizza is pleasant&quot;)
+p.add_support_statement(&quot;i like pizza&quot;)
+p.add_source(&quot;http://pizza_reviews.com&quot;)
+
+for s in p.statements:
+    assert s.is_true
+assert bool(p) == True
+
+p.statements[0].disagree()
+
+assert bool(p) == False
+
+assert p.as_json == {'is_true': False,
+                     'sources': ['http://pizza_reviews.com'],
+                     'statements': ['pizza is food',
+                                    'the taste of pizza is pleasant'],
+                     'support': ['i like pizza'],
+                     'description': 'pizza tastes good'}
+</code></pre>
+
 <h4 id="add95how95statement">add_how_statement</h4>
 <pre><code>
 def add_how_statement(self, text)
@@ -247,7 +273,7 @@ def validate_statement(statement)
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="../difficult_dialogs.arguments/" class="btn btn-neutral" title="arguments"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../difficult_dialogs.policy/" class="btn btn-neutral" title="policy"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -273,7 +299,7 @@ def validate_statement(statement)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../difficult_dialogs.arguments/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../difficult_dialogs.policy/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>
