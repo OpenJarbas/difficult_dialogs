@@ -24,9 +24,10 @@ class DummyPolicy(KnowItAllPolicy):
 
         typical actions are
 
-        - calling self.agree() or self.disagree() to direct the policy (return True)
+        - calling self.agree() or self.disagree() to direct the policy
         - calling self.what(), self.why(), self.how(), self.when(),
-        self.where() and setting the output (return False)
+        self.where() to answer the Five Ws
+        - calling self.reprompt() to get back on topic
 
         return True or False, this determines if dialog should proceed or
         wait for different user input
@@ -37,14 +38,19 @@ class DummyPolicy(KnowItAllPolicy):
         # useful to intercept and handle text in your own way
         if "what" in text:
             self.what()
+            self.reprompt()
         elif "why" in text:
             self.why()
+            self.reprompt()
         elif "how" in text:
             self.how()
+            self.reprompt()
         elif "where" in text:
             self.where()
+            self.reprompt()
         elif "when" in text:
             self.when()
+            self.reprompt()
         else:
             return True
         return False
@@ -74,9 +80,9 @@ class DummyPolicy(KnowItAllPolicy):
         return True or False """
         agrees = random.choice([True, False])
         if agrees:
-            print(self.speak("user agrees"))
+            print("USER: I agree")
             return True
-        print(self.speak("user disagrees"))
+        print("USER: I disagree")
         return False
 
     def on_positive_feedback(self):
@@ -177,8 +183,10 @@ class DummyPolicy(KnowItAllPolicy):
          """
         text = str(text).strip()
         self._cache_this(text)
-        print("BOT: " + text)
-        return text
+        if self._async_thread is not None:
+            print("BOT: " + text)
+            return text
+        return "BOT: " + text
 
 
 arg_folder = join(dirname(__file__), "argument_template")
@@ -189,6 +197,8 @@ arg = Argument(path=arg_folder)
 
 # defend when user disagrees
 dialog = DummyPolicy(arg)
+
+# dialog.run()
 
 # argument / user loop
 dialog.run_async()

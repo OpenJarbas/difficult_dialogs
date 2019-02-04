@@ -1,43 +1,64 @@
+"""
+A premise is a set of Statements, a premise is True if all it's statements are True
+
+A premise also has sources to back it up, and support dialog that can be interjected at will
+
+```python
+from difficult_dialogs.premises import Premise
+
+p = Premise("pizza tastes good")
+p.add_statement("pizza is food")
+p.add_statement("the taste of pizza is pleasant")
+p.add_support_statement("i like pizza")
+p.add_source("http://pizza_reviews.com")
+
+for s in p.statements:
+    assert s.is_true
+assert bool(p) == True
+
+p.statements[0].disagree()
+
+assert bool(p) == False
+
+assert p.as_json == {'is_true': False,
+                     'sources': ['http://pizza_reviews.com'],
+                     'statements': ['pizza is food',
+                                    'the taste of pizza is pleasant'],
+                     'support': ['i like pizza'],
+                     'description': 'pizza tastes good'}
+```
+"""
+
 from difficult_dialogs.statements import Statement
 from difficult_dialogs.exceptions import UnrecognizedStatementFormat, \
     UnrecognizedDescriptionFormat
 
 
 class Premise(object):
-    """
-    A premise is a set of Statements, a premise is True if all it's statements are True
 
-    A premise also has sources to back it up, and support dialog that can be interjected at will
-
-    ```python
-    from difficult_dialogs.premises import Premise
-
-    p = Premise("pizza tastes good")
-    p.add_statement("pizza is food")
-    p.add_statement("the taste of pizza is pleasant")
-    p.add_support_statement("i like pizza")
-    p.add_source("http://pizza_reviews.com")
-
-    for s in p.statements:
-        assert s.is_true
-    assert bool(p) == True
-
-    p.statements[0].disagree()
-
-    assert bool(p) == False
-
-    assert p.as_json == {'is_true': False,
-                         'sources': ['http://pizza_reviews.com'],
-                         'statements': ['pizza is food',
-                                        'the taste of pizza is pleasant'],
-                         'support': ['i like pizza'],
-                         'description': 'pizza tastes good'}
-    ```
-    """
     def __init__(self, description, statements=None, sources=None,
                  support=None, what=None, when=None, where=None, how=None,
                  why=None):
         """
+
+        A premise is a core assumption of an argument
+
+        All statements in a premise need to be said, in no particular order, to understand the premise
+
+        A premise is True if all it's statements are True
+
+        A Premise contains:
+        - support statements - sentences that can be said at any time in
+        support of the premise
+        - sources - urls or strings identifying the source of the
+        information this premise is based on
+
+        Premises provide answer to the [Five Ws](https://en.wikipedia.org/wiki/Five_Ws)
+        - Who was involved?
+        - What happened?
+        - Where did it take place?
+        - When did it take place?
+        - Why did that happen?
 
         Args:
             description:

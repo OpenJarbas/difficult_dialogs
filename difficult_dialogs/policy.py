@@ -1,3 +1,88 @@
+"""
+A policy is a way to run an argument
+
+Policies decide how the conversation will go
+
+You can make your own policies by overriding key methods, or you can
+use the default policies
+
+see [example of DummyPolicy](https://github.com/JarbasAl/difficult_dialogs/blob/master/examples/dummy_policy.py)
+
+- argument.intro is spoken on start, it is meant to introduce the argument
+
+- a .premise file will be picked randomly and read
+
+- all statements inside a .premise file will be read, but in a random order
+
+- no statements will be repeated
+
+- when all statements inside a .premise file are read, another .premise
+file will be picked
+
+- when all .premise files are read, argument.conclusion is printed fully,
+it is meant to deliver the conclusion we want to reach
+
+```python
+from os.path import join, dirname
+
+from difficult_dialogs.arguments import Argument
+from difficult_dialogs.policy import KnowItAllPolicy, BasePolicy
+
+arg_folder = join(dirname(__file__), "i_think_therefore_i_am")
+arg = Argument(path=arg_folder)
+
+# ignore user input, just go trough all premises
+# dialog = BasePolicy(argument=arg)
+
+# defend when user disagrees
+dialog = KnowItAllPolicy(arg)
+
+
+# argument / user loop
+dialog.run_async()
+
+while True:
+    try:
+        if dialog.output:
+            print("BOT: " + dialog.output)
+            if not dialog.finished:
+                utterance = input("USER: ")
+                dialog.submit_input(utterance)
+            else:
+                break
+    except KeyboardInterrupt:
+        dialog.finished = True
+        break
+
+dialog.stop()
+```
+
+You also have access to lower level details, policies can be used without the run() loop
+
+```python
+from os.path import join, dirname
+
+from difficult_dialogs.arguments import Argument
+from difficult_dialogs.policy import BasePolicy
+
+arg_folder = join(dirname(__file__), "argument_template")
+arg = Argument(path=arg_folder)
+dialog = BasePolicy(argument=arg)
+
+# argument manual control
+print(dialog.start())
+while not dialog.finished:
+    assertion = dialog.choose_premise()
+    if assertion:
+        print(assertion)
+        for s in assertion.statements:
+            print(s)
+        print(assertion.sources)
+    else:
+        print(dialog.end())
+```
+"""
+
 import random
 from time import sleep
 from threading import Thread
@@ -8,85 +93,7 @@ log = getLogger("DialogRunner")
 
 class BasePolicy(object):
     """
-
-    A policy is a way to run an argument, it decides how the conversation will go
-
-    You can make your own policies by overriding key methods, or you can use the default policies
-
-    see [example of DummyPolicy](examples/dummy_policy.py)
-
-    - argument.intro is spoken on start, it is meant to introduce the argument
-
-    - a .premise file will be picked randomly and read
-
-    - all statements inside a .premise file will be read, but in a random order
-
-    - no statements will be repeated
-
-    - when all statements inside a .premise file are read, another .premise file will be picked
-
-    - when all .premise files are read, argument.conclusion is printed fully, it is meant to deliver the conclusion we want to reach
-
-    ```python
-    from os.path import join, dirname
-
-    from difficult_dialogs.arguments import Argument
-    from difficult_dialogs.policy import KnowItAllPolicy, BasePolicy
-
-    arg_folder = join(dirname(__file__), "i_think_therefore_i_am")
-    arg = Argument(path=arg_folder)
-
-    # ignore user input, just go trough all premises
-    # dialog = BasePolicy(argument=arg)
-
-    # defend when user disagrees
-    dialog = KnowItAllPolicy(arg)
-
-
-    # argument / user loop
-    dialog.run_async()
-
-    while True:
-        try:
-            if dialog.output:
-                print("BOT: " + dialog.output)
-                if not dialog.finished:
-                    utterance = input("USER: ")
-                    dialog.submit_input(utterance)
-                else:
-                    break
-        except KeyboardInterrupt:
-            dialog.finished = True
-            break
-
-    dialog.stop()
-    ```
-
-    You also have access to lower level details, policies can be used without the run() loop
-
-    ```python
-    from os.path import join, dirname
-
-    from difficult_dialogs.arguments import Argument
-    from difficult_dialogs.policy import BasePolicy
-
-    arg_folder = join(dirname(__file__), "argument_template")
-    arg = Argument(path=arg_folder)
-    dialog = BasePolicy(argument=arg)
-
-    # argument manual control
-    print(dialog.start())
-    while not dialog.finished:
-        assertion = dialog.choose_premise()
-        if assertion:
-            print(assertion)
-            for s in assertion.statements:
-                print(s)
-            print(assertion.sources)
-        else:
-            print(dialog.end())
-    ```
-
+    Template Policy that implements minimal functionality to run an argument
     """
 
     def __init__(self, name="base", argument=None):
@@ -587,8 +594,9 @@ class BasePolicy(object):
 
 class KnowItAllPolicy(BasePolicy):
     """
-
+    Policy that implements minimal corrective action on negative feedback
     """
+
     def __init__(self, argument):
         """
 
@@ -598,9 +606,15 @@ class KnowItAllPolicy(BasePolicy):
         BasePolicy.__init__(self, name="KnowItAll", argument=argument)
 
     def on_user_input(self, text):
-        """ handle user input
+        """
 
-        answers what, why, how, where, when questions or proceeds with dialog
+        answer to the [Five Ws](https://en.wikipedia.org/wiki/Five_Ws)
+
+        - Who was involved?
+        - What happened?
+        - Where did it take place?
+        - When did it take place?
+        - Why did that happen?
 
         """
         if "what" in text:
@@ -626,15 +640,7 @@ class KnowItAllPolicy(BasePolicy):
         """
         react to negative feedback
 
-        usually you will take corrective action here and manage the dialog
-        state
-
-        to control the dialog loop you will typically use:
-        - self.agree() / self.disagree()  - decide if on_negative_feedback
-        or on_positive_feedback should be called
-        - self.skip_feedback() - do not get user input
-
-        by default speak a support statement
+        speak a support statement
 
         if no more support statements call on_complete_failure
         """
@@ -654,12 +660,7 @@ class KnowItAllPolicy(BasePolicy):
         handle failure to get a response, called by on_negative_feedback if
         no support statements available
 
-        typically you will return a failure message and manage the dialog state
-
-        to control the dialog loop you will typically use:
-        - self.agree() / self.disagree()  - decide if on_negative_feedback
-        or on_positive_feedback should be called
-        - self.skip_feedback() - do not get user input
+        speak the sources of the premise, accept defeat, or force agreement
 
         Returns:
             sentence to speak (str)

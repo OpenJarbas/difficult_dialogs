@@ -1,3 +1,47 @@
+"""
+An Argument is a set of premises, a argument is True if all it's premises are True
+
+Arguments can be loaded from file structuring a folder like this
+
+    $ tree argument_template/
+    argument_template/
+    ├── argument.conclusion
+    ├── argument.intro
+    ├── X.premise
+    ├── X.source
+    ├── X.support
+    └── Y.premise
+
+
+- folder name is the argument name
+
+- X.premise is a premise the argument depends on
+
+- X.support are "comebacks" for when user disagrees with premise
+
+- X.source is information source for the premise
+
+- X is the premise we are currently arguing for
+
+```python
+from difficult_dialogs.arguments import Argument
+from os.path import dirname, join
+
+arg = Argument()
+
+path = join(dirname(__file__), "argument_template")
+arg.load(path)
+
+assert arg.is_true
+assert arg.description == "argument_template"
+
+from pprint import pprint
+
+pprint(arg.as_json)
+```
+
+"""
+
 from os.path import join, isdir
 from os import listdir
 
@@ -11,49 +55,7 @@ from difficult_dialogs.exceptions import MissingStatementException, \
 
 
 class Argument(object):
-    """
-    An Argument is a set of premises, a argument is True if all it's premises are True
 
-    Arguments can be loaded from file structuring a folder like this
-
-        $ tree argument_template/
-        argument_template/
-        ├── argument.conclusion
-        ├── argument.intro
-        ├── X.premise
-        ├── X.source
-        ├── X.support
-        └── Y.premise
-
-
-    - folder name is the argument name
-
-    - X.premise is a premise the argument depends on
-
-    - X.support are "comebacks" for when user disagrees with premise
-
-    - X.source is information source for the premise
-
-    - X is the premise we are currently arguing for
-
-    ```python
-    from difficult_dialogs.arguments import Argument
-    from os.path import dirname, join
-
-    arg = Argument()
-
-    path = join(dirname(__file__), "argument_template")
-    arg.load(path)
-
-    assert arg.is_true
-    assert arg.description == "argument_template"
-
-    from pprint import pprint
-
-    pprint(arg.as_json)
-    ```
-
-    """
     def __init__(self, description="", premises=None, intro="",
                  conclusion="", path=None):
         """
