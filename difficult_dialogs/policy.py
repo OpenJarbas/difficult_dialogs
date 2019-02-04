@@ -7,7 +7,87 @@ log = getLogger("DialogRunner")
 
 
 class BasePolicy(object):
-    """ interaction with arguments """
+    """
+
+    A policy is a way to run an argument, it decides how the conversation will go
+
+    You can make your own policies by overriding key methods, or you can use the default policies
+
+    see [example of DummyPolicy](examples/dummy_policy.py)
+
+    - argument.intro is spoken on start, it is meant to introduce the argument
+
+    - a .premise file will be picked randomly and read
+
+    - all statements inside a .premise file will be read, but in a random order
+
+    - no statements will be repeated
+
+    - when all statements inside a .premise file are read, another .premise file will be picked
+
+    - when all .premise files are read, argument.conclusion is printed fully, it is meant to deliver the conclusion we want to reach
+
+    ```python
+    from os.path import join, dirname
+
+    from difficult_dialogs.arguments import Argument
+    from difficult_dialogs.policy import KnowItAllPolicy, BasePolicy
+
+    arg_folder = join(dirname(__file__), "i_think_therefore_i_am")
+    arg = Argument(path=arg_folder)
+
+    # ignore user input, just go trough all premises
+    # dialog = BasePolicy(argument=arg)
+
+    # defend when user disagrees
+    dialog = KnowItAllPolicy(arg)
+
+
+    # argument / user loop
+    dialog.run_async()
+
+    while True:
+        try:
+            if dialog.output:
+                print("BOT: " + dialog.output)
+                if not dialog.finished:
+                    utterance = input("USER: ")
+                    dialog.submit_input(utterance)
+                else:
+                    break
+        except KeyboardInterrupt:
+            dialog.finished = True
+            break
+
+    dialog.stop()
+    ```
+
+    You also have access to lower level details, policies can be used without the run() loop
+
+    ```python
+    from os.path import join, dirname
+
+    from difficult_dialogs.arguments import Argument
+    from difficult_dialogs.policy import BasePolicy
+
+    arg_folder = join(dirname(__file__), "argument_template")
+    arg = Argument(path=arg_folder)
+    dialog = BasePolicy(argument=arg)
+
+    # argument manual control
+    print(dialog.start())
+    while not dialog.finished:
+        assertion = dialog.choose_premise()
+        if assertion:
+            print(assertion)
+            for s in assertion.statements:
+                print(s)
+            print(assertion.sources)
+        else:
+            print(dialog.end())
+    ```
+
+    """
 
     def __init__(self, name="base", argument=None):
         """
@@ -68,11 +148,12 @@ class BasePolicy(object):
 
     def is_cached(self, entry):
         """
+        check if entry was used already
 
         Args:
-            entry:
+            entry: text or Statement
 
-        Returns:
+        Returns: is_cached (bool)
 
         """
         entry = str(entry).strip()
@@ -114,8 +195,9 @@ class BasePolicy(object):
     @property
     def user_agrees(self):
         """
+        Does the user agree with the argument
 
-        Returns:
+        Returns: in_agreement (bool)
 
         """
         return self._in_agreement
@@ -124,7 +206,7 @@ class BasePolicy(object):
     def already_spoken(self):
         """
 
-        Returns:
+        Returns: already spoken responses (list)
 
         """
         return self._cache
@@ -133,7 +215,7 @@ class BasePolicy(object):
     def output(self):
         """
 
-        Returns:
+        Returns: current bot dialog (str)
 
         """
         return self._output
@@ -142,18 +224,18 @@ class BasePolicy(object):
     def intro_statement(self):
         """
 
-        Returns:
+        Returns: argument introduction (str)
 
         """
         if self.argument is not None:
-            return self.argument.intro_statement
+            return str(self.argument.intro_statement)
         return ""
 
     @property
     def conclusion_statement(self):
         """
 
-        Returns:
+        Returns: argument conclusion (str)
 
         """
         if self.argument is not None:
@@ -164,7 +246,7 @@ class BasePolicy(object):
     def premises(self):
         """
 
-        Returns:
+        Returns: all premises of this argument (list)
 
         """
         if self.argument is not None:
@@ -175,11 +257,11 @@ class BasePolicy(object):
     def start(self):
         """ prepare context of dialog
 
-        at the minimum this should
-
         - reset policy, self.reset()
         - set running flag, self.finished = False
-        - return speak intro statement
+        - speak intro statement
+
+        Returns: intro statement (str)
 
         """
         self.reset()
@@ -189,17 +271,21 @@ class BasePolicy(object):
     def end(self):
         """ handle outcome of dialog
 
-        at the minimum this should
-
         - unset running flag, self.finished = True
         - return speak conclusion statement
+
+        Returns: conclusion statement (str)
 
         """
         self.finished = True
         return self.speak(self.conclusion_statement)
 
     def choose_premise(self, argument=None):
-        """ select which Premise to tackle next """
+        """
+        select which Premise to tackle next
+
+        Returns: next premise (Premise)
+        """
         argument = argument or self.argument
         choices = [t for t in argument.premises
                    if not self.is_cached(t)]
@@ -209,13 +295,17 @@ class BasePolicy(object):
         self._cache_this(assertion)  # remember assertion
         return assertion
 
-    def choose_next_statement(self, assertion=None):
-        """ select which Statement to tackle next """
-        assertion = assertion or self.current_premise
-        choices = [t for t in assertion.statements
+    def choose_next_statement(self, premise=None):
+        """
+        select which Statement to tackle next
+
+        Returns: next statement (Statement)
+        """
+        premise = premise or self.current_premise
+        choices = [t for t in premise.statements
                    if not self.is_cached(t)]
         if not len(choices):
-            # go to next assertion
+            # go to next premise
             next_assertion = self.choose_premise()
             if next_assertion is None:
                 self.finished = True
@@ -229,13 +319,13 @@ class BasePolicy(object):
 
     def agree(self):
         """
-
+        Agree with current premise
         """
         self._in_agreement = True
 
     def disagree(self):
         """
-
+        Disagree with current premise
         """
         self._in_agreement = False
 
@@ -297,14 +387,16 @@ class BasePolicy(object):
 
     def skip_feedback(self):
         """
-
+        Do not ask for user feedback
         """
         self._skip_feedback = True
 
     def reprompt(self):
         """
 
-        Returns:
+        Speak last used prompt
+
+        Returns: last prompt (str)
 
         """
         return self.speak(self._last_prompt)
@@ -335,7 +427,7 @@ class BasePolicy(object):
         """ run the interaction, ask if user agrees or not after every
         statement
 
-        NOTE: ignores on user input callback
+        NOTE: ignores on user input callback, mostly meant for quick testing
         """
         # introduce argument
         print(self.start())
@@ -379,7 +471,7 @@ class BasePolicy(object):
     # async
     def wait_for_input(self):
         """
-
+        wait until self.submit_input is called
         """
         self._input = ""
         while not self._input:
@@ -387,8 +479,6 @@ class BasePolicy(object):
 
     def wait_for_feedback(self, prompt=None):
         """
-        used in run_async(), if not running async get_feedback is used instead
-
         ask user if he agrees with current statement or not
 
         prompt is a string or list of strings, if it's a list a random entry will be picked
@@ -404,7 +494,7 @@ class BasePolicy(object):
         """
 
         Args:
-            text:
+            text: utterance (str)
         """
         self._output = ""
         if self.on_user_input(text):
@@ -412,7 +502,7 @@ class BasePolicy(object):
 
     def run_async(self):
         """
-
+        Start listening for user input
         """
         self._async_thread = Thread(target=self._async_loop)
         self._async_thread.setDaemon(True)
@@ -420,7 +510,7 @@ class BasePolicy(object):
 
     def stop(self):
         """
-
+        Stop listening for user input
         """
         self.finished = True
         try:
@@ -487,11 +577,7 @@ class BasePolicy(object):
     def on_negative_feedback(self):
         """ react to negative feedback
 
-        by default speak a support statement
-
-        if no more support statements show the source
-
-        if source was already shown, skip to next statement
+        by default goes to next statement
         """
         statement = self.choose_next_statement()
         if not statement:
@@ -501,6 +587,7 @@ class BasePolicy(object):
 
 class KnowItAllPolicy(BasePolicy):
     """
+
     """
     def __init__(self, argument):
         """
