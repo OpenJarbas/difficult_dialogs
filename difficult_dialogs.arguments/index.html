@@ -55,6 +55,16 @@
           
             <li class="toctree-l1">
 		
+    <a class="" href="../difficult_dialogs.premises/">premises</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.statements/">statements</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
     <a class="" href="../difficult_dialogs.policy/">policy</a>
 	    </li>
           
@@ -78,16 +88,6 @@
             <li class="toctree-l1">
 		
     <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.statements/">statements</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.premises/">premises</a>
 	    </li>
           
         </ul>
@@ -166,322 +166,133 @@ assert arg.description == &quot;argument_template&quot;
 from pprint import pprint
 
 pprint(arg.as_json)
-
-####  add\_how
-
-
-
-
 </code></pre>
 
-<p>def add_how(self, text, premise)</p>
+<h4 id="add95how">add_how</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  add\_premise
-
-
-
+def add_how(self, text, premise)
 
 </code></pre>
 
-<p>def add_premise(self, premise)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95premise">add_premise</h4>
 <pre><code>
-
-
-
-add an premise to this argument
-
-
-
-premise should be an Premise object
-
-
-
-if premise is a string, an premise will be created from it
-
-
-
-if premise is a dictionary, an premise will be created from data
-
-
-
-if premise is a list, an premise will be created with list as statements
-
-
-
-####  add\_source
-
-
-
+def add_premise(self, premise)
 
 </code></pre>
 
-<p>def add_source(self, source, premise)</p>
+<p>add an premise to this argument</p>
+<p>premise should be an Premise object</p>
+<p>if premise is a string, an premise will be created from it</p>
+<p>if premise is a dictionary, an premise will be created from data</p>
+<p>if premise is a list, an premise will be created with list as statements</p>
+<h4 id="add95source">add_source</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  add\_statement
-
-
-
+def add_source(self, source, premise)
 
 </code></pre>
 
-<p>def add_statement(self, statement, premise)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95statement">add_statement</h4>
 <pre><code>
-
-
-
-adds a statement to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-statement may be a string, Statement, list of strings or list of Statements
-
-
-
-####  add\_support
-
-
-
+def add_statement(self, statement, premise)
 
 </code></pre>
 
-<p>def add_support(self, support_statement, premise)</p>
+<p>adds a statement to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>statement may be a string, Statement, list of strings or list of Statements</p>
+<h4 id="add95support">add_support</h4>
 <pre><code>
-
-
-
-adds a support statement to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-support_statememt may be a string, Statement, list of strings or
-
-list of Statements
-
-
-
-####  add\_what
-
-
-
+def add_support(self, support_statement, premise)
 
 </code></pre>
 
-<p>def add_what(self, text, premise)</p>
+<p>adds a support statement to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>support_statememt may be a string, Statement, list of strings or</p>
+<p>list of Statements</p>
+<h4 id="add95what">add_what</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  add\_when
-
-
-
+def add_what(self, text, premise)
 
 </code></pre>
 
-<p>def add_when(self, text, premise)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95when">add_when</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  add\_where
-
-
-
+def add_when(self, text, premise)
 
 </code></pre>
 
-<p>def add_where(self, text, premise)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95where">add_where</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  add\_why
-
-
-
+def add_where(self, text, premise)
 
 </code></pre>
 
-<p>def add_why(self, text, premise)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95why">add_why</h4>
 <pre><code>
-
-
-
-adds a source to an premise of this argument
-
-
-
-premise will be created or modified
-
-
-
-source may be a string or list of strings
-
-
-
-####  agree
-
-
-
+def add_why(self, text, premise)
 
 </code></pre>
 
-<p>def agree(self)</p>
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="agree">agree</h4>
 <pre><code>
-
-
-
-flag all premises as True 
-
-
-
-####  load
-
-
-
+def agree(self)
 
 </code></pre>
 
-<p>def load(self, path=None)</p>
+<p>flag all premises as True </p>
+<h4 id="load">load</h4>
 <pre><code>
-
-
-
-load argument from directory 
-
-
-
-####  set\_conclusion
-
-
-
+def load(self, path=None)
 
 </code></pre>
 
-<p>def set_conclusion(self, text)</p>
+<p>load argument from directory </p>
+<h4 id="set95conclusion">set_conclusion</h4>
 <pre><code>
-
-
-
-set argument conclusion from string or Statement 
-
-
-
-####  set\_description
-
-
-
+def set_conclusion(self, text)
 
 </code></pre>
 
-<p>def set_description(self, text)</p>
+<p>set argument conclusion from string or Statement </p>
+<h4 id="set95description">set_description</h4>
 <pre><code>
-
-
-
-set argument description from string
-
-
-
-####  set\_intro
-
-
-
+def set_description(self, text)
 
 </code></pre>
 
-<p>def set_intro(self, text)</p>
+<p>set argument description from string</p>
+<h4 id="set95intro">set_intro</h4>
 <pre><code>
-
-
-
-set argument introduction from string or Statement 
-
-
-
-####  update
-
-
-
+def set_intro(self, text)
 
 </code></pre>
 
-<p>def update(self, argument)</p>
-<p>```</p>
+<p>set argument introduction from string or Statement </p>
+<h4 id="update">update</h4>
+<pre><code>
+def update(self, argument)
+
+</code></pre>
+
 <p>argument can be an Argument object or a dictionary with a "premises" field</p>
 <p>if argument is a list, each item will be added recursively</p>
 <p>premises will be updated or created</p>
