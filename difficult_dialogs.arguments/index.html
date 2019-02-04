@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>arguments - difficult_dialogs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "arguments";
+    var mkdocs_page_input_path = "difficult_dialogs.arguments.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> difficult_dialogs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.policy/">policy</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.statements/">statements</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">arguments</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#module-difficult_dialogsarguments">Module difficult_dialogs.arguments</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#argument">Argument</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.premises/">premises</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">difficult_dialogs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>arguments</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="module-difficult_dialogsarguments">Module difficult_dialogs.arguments</h2>
+<h3 id="argument">Argument</h3>
+<h4 id="add95how">add_how</h4>
+<pre><code>
+def add_how(self, text, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95premise">add_premise</h4>
+<pre><code>
+def add_premise(self, premise)
+
+</code></pre>
+
+<p>add an premise to this argument</p>
+<p>premise should be an Premise object</p>
+<p>if premise is a string, an premise will be created from it</p>
+<p>if premise is a dictionary, an premise will be created from data</p>
+<p>if premise is a list, an premise will be created with list as statements</p>
+<h4 id="add95source">add_source</h4>
+<pre><code>
+def add_source(self, source, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95statement">add_statement</h4>
+<pre><code>
+def add_statement(self, statement, premise)
+
+</code></pre>
+
+<p>adds a statement to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>statement may be a string, Statement, list of strings or list of Statements</p>
+<h4 id="add95support">add_support</h4>
+<pre><code>
+def add_support(self, support_statement, premise)
+
+</code></pre>
+
+<p>adds a support statement to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>support_statememt may be a string, Statement, list of strings or</p>
+<p>list of Statements</p>
+<h4 id="add95what">add_what</h4>
+<pre><code>
+def add_what(self, text, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95when">add_when</h4>
+<pre><code>
+def add_when(self, text, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95where">add_where</h4>
+<pre><code>
+def add_where(self, text, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="add95why">add_why</h4>
+<pre><code>
+def add_why(self, text, premise)
+
+</code></pre>
+
+<p>adds a source to an premise of this argument</p>
+<p>premise will be created or modified</p>
+<p>source may be a string or list of strings</p>
+<h4 id="agree">agree</h4>
+<pre><code>
+def agree(self)
+
+</code></pre>
+
+<p>flag all premises as True </p>
+<h4 id="load">load</h4>
+<pre><code>
+def load(self, path=None)
+
+</code></pre>
+
+<p>load argument from directory </p>
+<h4 id="set95conclusion">set_conclusion</h4>
+<pre><code>
+def set_conclusion(self, text)
+
+</code></pre>
+
+<p>set argument conclusion from string or Statement </p>
+<h4 id="set95description">set_description</h4>
+<pre><code>
+def set_description(self, text)
+
+</code></pre>
+
+<p>set argument description from string</p>
+<h4 id="set95intro">set_intro</h4>
+<pre><code>
+def set_intro(self, text)
+
+</code></pre>
+
+<p>set argument introduction from string or Statement </p>
+<h4 id="update">update</h4>
+<pre><code>
+def update(self, argument)
+
+</code></pre>
+
+<p>argument can be an Argument object or a dictionary with a "premises" field</p>
+<p>if argument is a list, each item will be added recursively</p>
+<p>premises will be updated or created</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../difficult_dialogs.premises/" class="btn btn-neutral float-right" title="premises">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../difficult_dialogs.exceptions/" class="btn btn-neutral" title="exceptions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../difficult_dialogs.exceptions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../difficult_dialogs.premises/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
