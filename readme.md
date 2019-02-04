@@ -42,7 +42,6 @@ while True:
             else:
                 break
     except KeyboardInterrupt:
-        dialog.finished = True
         break
 
 dialog.stop()
