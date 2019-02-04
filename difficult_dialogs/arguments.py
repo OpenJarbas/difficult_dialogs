@@ -11,8 +11,19 @@ from difficult_dialogs.exceptions import MissingStatementException, \
 
 
 class Argument(object):
+    """
+    """
     def __init__(self, description="", premises=None, intro="",
                  conclusion="", path=None):
+        """
+
+        Args:
+            description:
+            premises:
+            intro:
+            conclusion:
+            path:
+        """
         self._premises = premises or {}
         self.description = description
         self.conclusion_statement = conclusion
@@ -22,9 +33,17 @@ class Argument(object):
             self.load()
 
     def _validate_premise(self, premise):
+        """
+
+        Args:
+            premise:
+
+        Returns:
+
+        """
         try:
             premise = self.add_premise(premise)
-            return premise.description
+            return premise.description.text
         except Exception as e:
             print(e)
             return ""
@@ -41,6 +60,8 @@ class Argument(object):
         if premise is a list, an premise will be created with list as statements
 
         """
+
+
         if isinstance(premise, dict):
             premise = Premise("dummy").from_json(premise)
             if premise.description == "dummy":
@@ -63,11 +84,11 @@ class Argument(object):
             raise MissingAssertionException("Tried to add a non Premise "
                                             "object")
 
-        if premise.description not in self._premises:
-            self._premises[premise.description] = premise
+        if premise.description.text not in self._premises:
+            self._premises[premise.description.text] = premise
         else:
-            self._premises[premise.description].update(premise)
-        return self._premises[premise.description]
+            self._premises[premise.description.text].update(premise)
+        return self._premises[premise.description.text]
 
     def add_support(self, support_statement, premise):
         """
@@ -136,6 +157,111 @@ class Argument(object):
                 raise UnrecognizedSourceFormat
             self._premises[txt].add_source(s)
 
+    def add_what(self, text, premise):
+        """
+        adds a source to an premise of this argument
+
+        premise will be created or modified
+
+        source may be a string or list of strings
+        """
+
+        txt = self._validate_premise(premise)
+        if not txt:
+            raise MissingAssertionException("tried to add statement to non "
+                                            "existing Premise")
+
+        if not isinstance(text, list):
+            text = [text]
+        for s in text:
+            if not isinstance(s, str):
+                raise UnrecognizedSourceFormat
+            self._premises[txt].add_what_statement(s)
+
+    def add_why(self, text, premise):
+        """
+        adds a source to an premise of this argument
+
+        premise will be created or modified
+
+        source may be a string or list of strings
+        """
+
+        txt = self._validate_premise(premise)
+        if not txt:
+            raise MissingAssertionException("tried to add statement to non "
+                                            "existing Premise")
+
+        if not isinstance(text, list):
+            text = [text]
+        for s in text:
+            if not isinstance(s, str):
+                raise UnrecognizedSourceFormat
+            self._premises[txt].add_why_statement(s)
+
+    def add_where(self, text, premise):
+        """
+        adds a source to an premise of this argument
+
+        premise will be created or modified
+
+        source may be a string or list of strings
+        """
+
+        txt = self._validate_premise(premise)
+        if not txt:
+            raise MissingAssertionException("tried to add statement to non "
+                                            "existing Premise")
+
+        if not isinstance(text, list):
+            text = [text]
+        for s in text:
+            if not isinstance(s, str):
+                raise UnrecognizedSourceFormat
+            self._premises[txt].add_where_statement(s)
+
+    def add_when(self, text, premise):
+        """
+        adds a source to an premise of this argument
+
+        premise will be created or modified
+
+        source may be a string or list of strings
+        """
+
+        txt = self._validate_premise(premise)
+        if not txt:
+            raise MissingAssertionException("tried to add statement to non "
+                                            "existing Premise")
+
+        if not isinstance(text, list):
+            text = [text]
+        for s in text:
+            if not isinstance(s, str):
+                raise UnrecognizedSourceFormat
+            self._premises[txt].add_when_statement(s)
+
+    def add_how(self, text, premise):
+        """
+        adds a source to an premise of this argument
+
+        premise will be created or modified
+
+        source may be a string or list of strings
+        """
+
+        txt = self._validate_premise(premise)
+        if not txt:
+            raise MissingAssertionException("tried to add statement to non "
+                                            "existing Premise")
+
+        if not isinstance(text, list):
+            text = [text]
+        for s in text:
+            if not isinstance(s, str):
+                raise UnrecognizedSourceFormat
+            self._premises[txt].add_how_statement(s)
+
     def agree(self):
         """ flag all premises as True """
 
@@ -177,25 +303,37 @@ class Argument(object):
             return
 
         self.path = path
-        self.description = self.description or path.split("/")[-1]
+        self.description = self.description or \
+                           path.split("/")[-1].replace("_", " ")
         files = listdir(path)
+        premises = [f for f in files if f.endswith(".premise")]
+        for f in premises:
+            a = f.split(".")[0]
+            with open(join(path, f), "r") as fi:
+                self.add_premise(
+                    Premise(description=a,
+                            statements=fi.readlines()))
         for f in files:
             a = f.split(".")[0]
-
             with open(join(path, f), "r") as fi:
-                if ".premise" in f:
-                    self.add_premise(
-                        Premise(description=a, statements=fi.readlines()))
-                elif ".support" in f:
+                if f.endswith(".support"):
                     self.add_support(fi.readlines(), a)
-                elif ".source" in f:
+                elif f.endswith(".source"):
                     self.add_source(fi.readlines(), a)
-                elif ".conclusion" in f:
-                    with open(join(path, f), "r") as fi:
-                        self.set_conclusion(" ".join(fi.readlines()))
+                elif f.endswith(".what"):
+                    self.add_what(fi.readlines(), a)
+                elif f.endswith(".why"):
+                    self.add_why(fi.readlines(), a)
+                elif f.endswith(".when"):
+                    self.add_when(fi.readlines(), a)
+                elif f.endswith(".where"):
+                    self.add_where(fi.readlines(), a)
+                elif f.endswith(".how"):
+                    self.add_how(fi.readlines(), a)
+                elif f.endswith(".conclusion"):
+                    self.set_conclusion(" ".join(fi.readlines()))
                 elif ".intro" in f:
-                    with open(join(path, f), "r") as fi:
-                        self.set_intro(" ".join(fi.readlines()))
+                    self.set_intro(" ".join(fi.readlines()))
 
     @property
     def intro(self):
@@ -217,6 +355,11 @@ class Argument(object):
 
     @property
     def as_json(self):
+        """
+
+        Returns:
+
+        """
         return {"intro": self.intro_statement.text,
                 "conclusion": self.conclusion_statement.text,
                 "premises": [s.as_json for s in self.premises],
@@ -293,7 +436,17 @@ class Argument(object):
                 "is_true": self.is_true}
 
     def __str__(self):
+        """
+
+        Returns:
+
+        """
         return self.description
 
     def __bool__(self):
+        """
+
+        Returns:
+
+        """
         return self.is_true

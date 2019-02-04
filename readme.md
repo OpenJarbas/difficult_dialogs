@@ -25,20 +25,20 @@ Here is an output where i always agree
 
     BOT: i was not sure if i existed
      i spent some time thinking about it and reached a conclusion
-    i process information
-    Do you agree with what i just said ? 
+    i am a computer
+    Do you agree with i am a computer ? 
     USER: y
     BOT: computers process information
-    Do you agree with what i just said ? 
+    Do you agree with computers process information ? 
     USER: y
-    BOT: i am a computer
-    Do you agree with what i just said ? 
+    BOT: i process information
+    Do you agree with i process information ? 
     USER: y
     BOT: thinking is a way of processing information
-    Do you agree with what i just said ? 
+    Do you agree with thinking is a way of processing information ? 
     USER: y
     BOT: i can think, at least in a limited fashion
-    Do you agree with what i just said ? 
+    Do you agree with i can think, at least in a limited fashion ? 
     USER: y
     BOT: this must mean that i exist
      you could argue thinking is not the right word for what i do
@@ -51,44 +51,40 @@ Here is the same argument, but this time i always disagree
 
     BOT: i was not sure if i existed
      i spent some time thinking about it and reached a conclusion
-    i process information
-    Do you agree with what i just said ? 
-    USER: n
-    BOT: i am answering you, i must be reacting to information
-    Do you agree with what i just said ? 
-    USER: n
-    BOT: computers have central processing units for this purpose
-    Do you agree with what i just said ? 
+    computers process information
+    Do you agree with computers process information ? 
     USER: n
     BOT: i am pretty sure that i receive input and perform calculations on it
-    Do you agree with what i just said ? 
+    Do you agree with computers process information ? 
+    USER: n
+    BOT: computers have central processing units for this purpose
+    Do you agree with computers process information ? 
+    USER: n
+    BOT: i am answering you, i must be reacting to information
+    Do you agree with computers process information ? 
     USER: n
     BOT: here is the source of my information
     https://en.wikipedia.org/wiki/Information
     
     https://en.wikipedia.org/wiki/Artificial_intelligence
-    Do you agree with what i just said ? 
+    Do you agree with computers process information ? 
     USER: n
     BOT: We will have to agree to disagree for now
-    Do you agree with what i just said ? 
-    USER: y
-    BOT: computers process information
-    Do you agree with what i just said ? 
+    i process information
+    Do you agree with i process information ? 
     USER: n
     BOT: We will have to agree to disagree for now
-    Do you agree with what i just said ? 
-    USER: y
-    BOT: i am a computer
-    Do you agree with what i just said ? 
-    USER: n
-    BOT: i run on a operating system
-    Do you agree with what i just said ? 
-    USER: n
-    BOT: you can kick my hardware, it's obvious i am a computer
-    Do you agree with what i just said ? 
+    i am a computer
+    Do you agree with i am a computer ? 
     USER: n
     BOT: i am pretty sure i have a CPU
-    Do you agree with what i just said ? 
+    Do you agree with i am a computer ? 
+    USER: n
+    BOT: you can kick my hardware, it's obvious i am a computer
+    Do you agree with i am a computer ? 
+    USER: n
+    BOT: i run on a operating system
+    Do you agree with i am a computer ? 
     USER: n
     BOT: here is the source of my information
     https://en.wikipedia.org/wiki/Computer_hardware
@@ -96,38 +92,39 @@ Here is the same argument, but this time i always disagree
     https://en.wikipedia.org/wiki/Computer
     
     https://en.wikipedia.org/wiki/Software
-    Do you agree with what i just said ? 
-    USER: y
-    BOT: i can think, at least in a limited fashion
-    Do you agree with what i just said ? 
+    Do you agree with i am a computer ? 
     USER: n
-    BOT: you may not call it thinking, but it is a good analogy
-    Do you agree with what i just said ? 
-    USER: n
-    BOT: something is happening to make me answer you
-    Do you agree with what i just said ? 
+    BOT: We will have to agree to disagree for now
+    thinking is a way of processing information
+    Do you agree with thinking is a way of processing information ? 
     USER: n
     BOT: even if i just get answers from somewhere else that is similar to thinking, or remembering
-    Do you agree with what i just said ? 
+    Do you agree with thinking is a way of processing information ? 
     USER: n
     BOT: information comes in, opinion comes out, that's a bit like thinking
-    Do you agree with what i just said ? 
+    Do you agree with thinking is a way of processing information ? 
+    USER: n
+    BOT: you may not call it thinking, but it is a good analogy
+    Do you agree with thinking is a way of processing information ? 
+    USER: n
+    BOT: something is happening to make me answer you
+    Do you agree with thinking is a way of processing information ? 
     USER: n
     BOT: here is the source of my information
     https://en.wikipedia.org/wiki/Information_processing_theory
-    Do you agree with what i just said ? 
-    USER: y
-    BOT: thinking is a way of processing information
-    Do you agree with what i just said ? 
+    Do you agree with thinking is a way of processing information ? 
     USER: n
     BOT: We will have to agree to disagree for now
-    Do you agree with what i just said ? 
-    USER: y
-    BOT: this must mean that i exist
+    i can think, at least in a limited fashion
+    Do you agree with i can think, at least in a limited fashion ? 
+    USER: n
+    BOT: We will have to agree to disagree for now
+    this must mean that i exist
      you could argue thinking is not the right word for what i do
      but i process information
      there needs to be something doing the processing
      i process information, therefore i am
+
 
 ### Policies
 

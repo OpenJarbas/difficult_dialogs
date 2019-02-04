@@ -1,11 +1,19 @@
 from os.path import join, dirname
-import time
+import random
+from time import sleep
 from difficult_dialogs.arguments import Argument
 from difficult_dialogs.policy import KnowItAllPolicy
 
 
 class DummyPolicy(KnowItAllPolicy):
+    """
+    """
     def __init__(self, argument):
+        """
+
+        Args:
+            argument:
+        """
         KnowItAllPolicy.__init__(self, argument)
         self.name = "dummy_policy"
 
@@ -14,22 +22,42 @@ class DummyPolicy(KnowItAllPolicy):
 
         intent parsing should be done here
 
-        if not using the run loop tipical actions are call self.agree() or
-        self.disagree()
+        typical actions are
+
+        - calling self.agree() or self.disagree() to direct the policy (return True)
+        - calling self.what(), self.why(), self.how(), self.when(),
+        self.where() and setting the output (return False)
+
+        return True or False, this determines if dialog should proceed or
+        wait for different user input
 
         """
-        print("user says: " + text)
+        print("USER: " + text)
+        # returning False will ignore the user input
+        # useful to intercept and handle text in your own way
+        if "what" in text:
+            self.what()
+        elif "why" in text:
+            self.why()
+        elif "how" in text:
+            self.how()
+        elif "where" in text:
+            self.where()
+        elif "when" in text:
+            self.when()
+        else:
+            return True
+        return False
 
     def wait_for_feedback(self, prompt=None):
         """
-        used in run_async(), if not running async get_feedback is used instead
-
         ask user if he agrees with current statement or not
 
-        prompt is a string or list of strings, if it's a list a random entry will be picked
+        prompt is a string or list of strings
 
         return True or False """
-        if int(time.time() % 2) == 0:
+        agrees = random.choice([True, False])
+        if agrees:
             self.submit_input("I agree")
             return True
         self.submit_input("I disagree")
@@ -44,7 +72,8 @@ class DummyPolicy(KnowItAllPolicy):
         prompt is a string or list of strings, if it's a list a random entry will be picked
 
         return True or False """
-        if int(time.time() % 2) == 0:
+        agrees = random.choice([True, False])
+        if agrees:
             print(self.speak("user agrees"))
             return True
         print(self.speak("user disagrees"))
@@ -53,27 +82,38 @@ class DummyPolicy(KnowItAllPolicy):
     def on_positive_feedback(self):
         """ react to positive feedback
 
-        by default goes to next statement
+        go to next statement or end the conversation
+
+        typically you want to return self.speak(statement)
+
+        :return statement (str) or None
 
         """
-        self.agree()
         statement = self.choose_next_statement()
         if not statement:
             return None
         return self.speak(statement)
 
     def on_negative_feedback(self):
-        """ react to negative feedback
-
-        by default speak a support statement
-
-        if no more support statements show the source
-
-        if source was already shown, skip to next statement
         """
+        react to negative feedback
 
-        self.finished = True
-        return "aborting dialog"
+        usually you will take corrective action here and manage the dialog
+        state
+
+        to control the dialog loop you will typically use:
+        - self.agree() / self.disagree()  - decide if on_negative_feedback
+        or on_positive_feedback should be called
+        - self.skip_feedback() - do not get user input
+
+        typically you want to return self.speak(statement) or None to end
+        the conversation
+
+        :return statement (str) or None
+
+        """
+        # no idea what to do
+        return self.speak(self.on_complete_failure())
 
     def start(self):
         """ prepare context of dialog
@@ -99,7 +139,46 @@ class DummyPolicy(KnowItAllPolicy):
 
         """
         self.finished = True
-        return self.speak("finished dialog, this is the conclusion")
+        if self.user_agrees:
+            return self.speak("finished dialog, this is the conclusion")
+        else:
+            return self.speak("too bad we don't agree")
+
+    def on_complete_failure(self):
+        """
+        handle failure to get a response, called by on_negative_feedback if
+        no support statements available
+
+        typically you will return a failure message and manage the dialog state
+
+        to control the dialog loop you will typically use:
+        - self.agree() / self.disagree()  - decide if on_negative_feedback
+        or on_positive_feedback should be called
+        - self.skip_feedback() - do not get user input
+
+        typically you want to return self.speak(statement) or None to end
+        the conversation
+
+        Returns:
+            sentence to speak (str)
+        """
+        # abort the dialog
+        self.finished = True
+        self.skip_feedback()
+        return "fatal error 404, answer not found"
+
+    def speak(self, text):
+        """
+        - normalize text
+        - cache response, self._cache_this(text)
+        - manage output, self._output += text
+        - return normalized text
+
+         """
+        text = str(text).strip()
+        self._cache_this(text)
+        print("BOT: " + text)
+        return text
 
 
 arg_folder = join(dirname(__file__), "argument_template")
@@ -112,4 +191,8 @@ arg = Argument(path=arg_folder)
 dialog = DummyPolicy(arg)
 
 # argument / user loop
-dialog.run()
+dialog.run_async()
+while not dialog.finished:
+    sleep(1)
+
+dialog.stop()
