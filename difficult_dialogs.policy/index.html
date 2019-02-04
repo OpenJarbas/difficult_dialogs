@@ -53,21 +53,6 @@
     <a class="" href="..">Home</a>
 	    </li>
           
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.statements/">statements</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../difficult_dialogs.arguments/">arguments</a>
-	    </li>
-          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">policy</a>
@@ -85,6 +70,21 @@
     
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.arguments/">arguments</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.exceptions/">exceptions</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../difficult_dialogs.statements/">statements</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -126,13 +126,93 @@
               
                 <h2 id="module-difficult_dialogspolicy">Module difficult_dialogs.policy</h2>
 <h3 id="basepolicy">BasePolicy</h3>
-<p>interaction with arguments </p>
+<p>A policy is a way to run an argument, it decides how the conversation will go</p>
+<p>You can make your own policies by overriding key methods, or you can use the default policies</p>
+<p>see <a href="examples/dummy_policy.py">example of DummyPolicy</a></p>
+<ul>
+<li>
+<p>argument.intro is spoken on start, it is meant to introduce the argument</p>
+</li>
+<li>
+<p>a .premise file will be picked randomly and read</p>
+</li>
+<li>
+<p>all statements inside a .premise file will be read, but in a random order</p>
+</li>
+<li>
+<p>no statements will be repeated</p>
+</li>
+<li>
+<p>when all statements inside a .premise file are read, another .premise file will be picked</p>
+</li>
+<li>
+<p>when all .premise files are read, argument.conclusion is printed fully, it is meant to deliver the conclusion we want to reach</p>
+</li>
+</ul>
+<pre><code class="python">from os.path import join, dirname
+
+from difficult_dialogs.arguments import Argument
+from difficult_dialogs.policy import KnowItAllPolicy, BasePolicy
+
+arg_folder = join(dirname(__file__), &quot;i_think_therefore_i_am&quot;)
+arg = Argument(path=arg_folder)
+
+# ignore user input, just go trough all premises
+# dialog = BasePolicy(argument=arg)
+
+# defend when user disagrees
+dialog = KnowItAllPolicy(arg)
+
+
+# argument / user loop
+dialog.run_async()
+
+while True:
+    try:
+        if dialog.output:
+            print(&quot;BOT: &quot; + dialog.output)
+            if not dialog.finished:
+                utterance = input(&quot;USER: &quot;)
+                dialog.submit_input(utterance)
+            else:
+                break
+    except KeyboardInterrupt:
+        dialog.finished = True
+        break
+
+dialog.stop()
+</code></pre>
+
+<p>You also have access to lower level details, policies can be used without the run() loop</p>
+<pre><code class="python">from os.path import join, dirname
+
+from difficult_dialogs.arguments import Argument
+from difficult_dialogs.policy import BasePolicy
+
+arg_folder = join(dirname(__file__), &quot;argument_template&quot;)
+arg = Argument(path=arg_folder)
+dialog = BasePolicy(argument=arg)
+
+# argument manual control
+print(dialog.start())
+while not dialog.finished:
+    assertion = dialog.choose_premise()
+    if assertion:
+        print(assertion)
+        for s in assertion.statements:
+            print(s)
+        print(assertion.sources)
+    else:
+        print(dialog.end())
+</code></pre>
+
 <h4 id="agree">agree</h4>
 <pre><code>
 def agree(self)
 
 </code></pre>
 
+<p>Agree with current premise</p>
 <h4 id="bind">bind</h4>
 <pre><code>
 def bind(self, argument)
@@ -146,24 +226,27 @@ def bind(self, argument)
 </code></pre>
 <h4 id="choose95next95statement">choose_next_statement</h4>
 <pre><code>
-def choose_next_statement(self, assertion=None)
+def choose_next_statement(self, premise=None)
 
 </code></pre>
 
-<p>select which Statement to tackle next </p>
+<p>select which Statement to tackle next</p>
+<p>Returns: next statement (Statement)</p>
 <h4 id="choose95premise">choose_premise</h4>
 <pre><code>
 def choose_premise(self, argument=None)
 
 </code></pre>
 
-<p>select which Premise to tackle next </p>
+<p>select which Premise to tackle next</p>
+<p>Returns: next premise (Premise)</p>
 <h4 id="disagree">disagree</h4>
 <pre><code>
 def disagree(self)
 
 </code></pre>
 
+<p>Disagree with current premise</p>
 <h4 id="end">end</h4>
 <pre><code>
 def end(self)
@@ -171,7 +254,6 @@ def end(self)
 </code></pre>
 
 <p>handle outcome of dialog</p>
-<p>at the minimum this should</p>
 <ul>
 <li>
 <p>unset running flag, self.finished = True</p>
@@ -180,6 +262,7 @@ def end(self)
 <p>return speak conclusion statement</p>
 </li>
 </ul>
+<p>Returns: conclusion statement (str)</p>
 <h4 id="get95feedback">get_feedback</h4>
 <pre><code>
 def get_feedback(self, prompt=None)
@@ -203,10 +286,11 @@ def is_cached(self, entry)
 
 </code></pre>
 
+<p>check if entry was used already</p>
 <p>Args:</p>
-<pre><code>entry:
+<pre><code>entry: text or Statement
 </code></pre>
-<p>Returns:</p>
+<p>Returns: is_cached (bool)</p>
 <h4 id="on95negative95feedback">on_negative_feedback</h4>
 <pre><code>
 def on_negative_feedback(self)
@@ -214,9 +298,7 @@ def on_negative_feedback(self)
 </code></pre>
 
 <p>react to negative feedback</p>
-<p>by default speak a support statement</p>
-<p>if no more support statements show the source</p>
-<p>if source was already shown, skip to next statement</p>
+<p>by default goes to next statement</p>
 <h4 id="on95positive95feedback">on_positive_feedback</h4>
 <pre><code>
 def on_positive_feedback(self)
@@ -254,7 +336,8 @@ def reprompt(self)
 
 </code></pre>
 
-<p>Returns:</p>
+<p>Speak last used prompt</p>
+<p>Returns: last prompt (str)</p>
 <h4 id="reset">reset</h4>
 <pre><code>
 def reset(self)
@@ -269,19 +352,21 @@ def run(self)
 
 <p>run the interaction, ask if user agrees or not after every</p>
 <p>statement</p>
-<p>NOTE: ignores on user input callback</p>
+<p>NOTE: ignores on user input callback, mostly meant for quick testing</p>
 <h4 id="run95async">run_async</h4>
 <pre><code>
 def run_async(self)
 
 </code></pre>
 
+<p>Start listening for user input</p>
 <h4 id="skip95feedback">skip_feedback</h4>
 <pre><code>
 def skip_feedback(self)
 
 </code></pre>
 
+<p>Do not ask for user feedback</p>
 <h4 id="sources">sources</h4>
 <pre><code>
 def sources(self, default_answer=&quot;i don't remember where i learned this&quot;)
@@ -318,7 +403,6 @@ def start(self)
 <p>NOTES:</p>
 <p>dialog actions</p>
 <p>prepare context of dialog</p>
-<p>at the minimum this should</p>
 <ul>
 <li>
 <p>reset policy, self.reset()</p>
@@ -327,15 +411,17 @@ def start(self)
 <p>set running flag, self.finished = False</p>
 </li>
 <li>
-<p>return speak intro statement</p>
+<p>speak intro statement</p>
 </li>
 </ul>
+<p>Returns: intro statement (str)</p>
 <h4 id="stop">stop</h4>
 <pre><code>
 def stop(self)
 
 </code></pre>
 
+<p>Stop listening for user input</p>
 <h4 id="submit95input">submit_input</h4>
 <pre><code>
 def submit_input(self, text)
@@ -343,7 +429,7 @@ def submit_input(self, text)
 </code></pre>
 
 <p>Args:</p>
-<pre><code>text:
+<pre><code>text: utterance (str)
 </code></pre>
 <h4 id="wait95for95feedback">wait_for_feedback</h4>
 <pre><code>
@@ -351,7 +437,6 @@ def wait_for_feedback(self, prompt=None)
 
 </code></pre>
 
-<p>used in run_async(), if not running async get_feedback is used instead</p>
 <p>ask user if he agrees with current statement or not</p>
 <p>prompt is a string or list of strings, if it's a list a random entry will be picked</p>
 <p>return True or False </p>
@@ -363,6 +448,7 @@ def wait_for_input(self)
 
 <p>NOTES:</p>
 <p>async</p>
+<p>wait until self.submit_input is called</p>
 <h4 id="what">what</h4>
 <pre><code>
 def what(self, default_answer=&quot;i don't know how to explain&quot;)
@@ -398,6 +484,7 @@ def agree(self)
 
 </code></pre>
 
+<p>Agree with current premise</p>
 <h4 id="bind_1">bind</h4>
 <pre><code>
 def bind(self, argument)
@@ -411,24 +498,27 @@ def bind(self, argument)
 </code></pre>
 <h4 id="choose95next95statement_1">choose_next_statement</h4>
 <pre><code>
-def choose_next_statement(self, assertion=None)
+def choose_next_statement(self, premise=None)
 
 </code></pre>
 
-<p>select which Statement to tackle next </p>
+<p>select which Statement to tackle next</p>
+<p>Returns: next statement (Statement)</p>
 <h4 id="choose95premise_1">choose_premise</h4>
 <pre><code>
 def choose_premise(self, argument=None)
 
 </code></pre>
 
-<p>select which Premise to tackle next </p>
+<p>select which Premise to tackle next</p>
+<p>Returns: next premise (Premise)</p>
 <h4 id="disagree_1">disagree</h4>
 <pre><code>
 def disagree(self)
 
 </code></pre>
 
+<p>Disagree with current premise</p>
 <h4 id="end_1">end</h4>
 <pre><code>
 def end(self)
@@ -436,7 +526,6 @@ def end(self)
 </code></pre>
 
 <p>handle outcome of dialog</p>
-<p>at the minimum this should</p>
 <ul>
 <li>
 <p>unset running flag, self.finished = True</p>
@@ -445,6 +534,7 @@ def end(self)
 <p>return speak conclusion statement</p>
 </li>
 </ul>
+<p>Returns: conclusion statement (str)</p>
 <h4 id="get95feedback_1">get_feedback</h4>
 <pre><code>
 def get_feedback(self, prompt=None)
@@ -468,10 +558,11 @@ def is_cached(self, entry)
 
 </code></pre>
 
+<p>check if entry was used already</p>
 <p>Args:</p>
-<pre><code>entry:
+<pre><code>entry: text or Statement
 </code></pre>
-<p>Returns:</p>
+<p>Returns: is_cached (bool)</p>
 <h4 id="on95complete95failure">on_complete_failure</h4>
 <pre><code>
 def on_complete_failure(self)
@@ -533,7 +624,8 @@ def reprompt(self)
 
 </code></pre>
 
-<p>Returns:</p>
+<p>Speak last used prompt</p>
+<p>Returns: last prompt (str)</p>
 <h4 id="reset_1">reset</h4>
 <pre><code>
 def reset(self)
@@ -548,19 +640,21 @@ def run(self)
 
 <p>run the interaction, ask if user agrees or not after every</p>
 <p>statement</p>
-<p>NOTE: ignores on user input callback</p>
+<p>NOTE: ignores on user input callback, mostly meant for quick testing</p>
 <h4 id="run95async_1">run_async</h4>
 <pre><code>
 def run_async(self)
 
 </code></pre>
 
+<p>Start listening for user input</p>
 <h4 id="skip95feedback_1">skip_feedback</h4>
 <pre><code>
 def skip_feedback(self)
 
 </code></pre>
 
+<p>Do not ask for user feedback</p>
 <h4 id="sources_1">sources</h4>
 <pre><code>
 def sources(self, default_answer=&quot;i don't remember where i learned this&quot;)
@@ -597,7 +691,6 @@ def start(self)
 <p>NOTES:</p>
 <p>dialog actions</p>
 <p>prepare context of dialog</p>
-<p>at the minimum this should</p>
 <ul>
 <li>
 <p>reset policy, self.reset()</p>
@@ -606,15 +699,17 @@ def start(self)
 <p>set running flag, self.finished = False</p>
 </li>
 <li>
-<p>return speak intro statement</p>
+<p>speak intro statement</p>
 </li>
 </ul>
+<p>Returns: intro statement (str)</p>
 <h4 id="stop_1">stop</h4>
 <pre><code>
 def stop(self)
 
 </code></pre>
 
+<p>Stop listening for user input</p>
 <h4 id="submit95input_1">submit_input</h4>
 <pre><code>
 def submit_input(self, text)
@@ -622,7 +717,7 @@ def submit_input(self, text)
 </code></pre>
 
 <p>Args:</p>
-<pre><code>text:
+<pre><code>text: utterance (str)
 </code></pre>
 <h4 id="wait95for95feedback_1">wait_for_feedback</h4>
 <pre><code>
@@ -630,7 +725,6 @@ def wait_for_feedback(self, prompt=None)
 
 </code></pre>
 
-<p>used in run_async(), if not running async get_feedback is used instead</p>
 <p>ask user if he agrees with current statement or not</p>
 <p>prompt is a string or list of strings, if it's a list a random entry will be picked</p>
 <p>return True or False </p>
@@ -642,6 +736,7 @@ def wait_for_input(self)
 
 <p>NOTES:</p>
 <p>async</p>
+<p>wait until self.submit_input is called</p>
 <h4 id="what_1">what</h4>
 <pre><code>
 def what(self, default_answer=&quot;i don't know how to explain&quot;)
@@ -677,10 +772,10 @@ def why(self, default_answer=&quot;i don't know why&quot;)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../difficult_dialogs.premises/" class="btn btn-neutral float-right" title="premises">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../difficult_dialogs.arguments/" class="btn btn-neutral float-right" title="arguments">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../difficult_dialogs.arguments/" class="btn btn-neutral" title="arguments"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -706,10 +801,10 @@ def why(self, default_answer=&quot;i don't know why&quot;)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../difficult_dialogs.arguments/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../difficult_dialogs.premises/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../difficult_dialogs.arguments/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
